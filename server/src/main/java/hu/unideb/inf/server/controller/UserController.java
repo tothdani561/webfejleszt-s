@@ -47,8 +47,13 @@ public class UserController {
     };
 
     @DeleteMapping("/{id}")
-    void deleteOne(@PathVariable Long id) {
-        // TODO
+    public ResponseEntity<String> deleteOne(@PathVariable Long id) {
+        try {
+            userService.deleteOne(id);
+            return ResponseEntity.ok("User deleted successfully.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     };
 
 }

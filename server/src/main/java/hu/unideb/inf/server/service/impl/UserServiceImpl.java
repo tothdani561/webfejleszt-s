@@ -55,6 +55,15 @@ public class UserServiceImpl implements UserService {
         userRepository.save(existingUser);
     }
 
+    @Override
+    public void deleteOne(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isEmpty()){
+            throw new IllegalArgumentException("User with id " + id + " does not exist.");
+        }
+        userRepository.deleteById(id);
+    }
+
 
     @Override
     public List<Task> getTasksByUserId(Long userId) {

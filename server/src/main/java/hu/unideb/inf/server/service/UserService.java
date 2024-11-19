@@ -14,6 +14,8 @@ public interface UserService {
 
     void updateOne(User updated);
 
+    void deleteOne(Long id);
+
     public List<Task> getTasksByUserId(Long userId);
 
 }
