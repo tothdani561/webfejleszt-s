@@ -23,5 +23,14 @@ public class TaskController {
         }
     }
 
+    @DeleteMapping("/{taskId}")
+    public ResponseEntity<String> deleteTask(@PathVariable Long taskId) {
+        try {
+            taskService.deleteTask(taskId);
+            return ResponseEntity.ok("Task deleted successfully.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
 }

@@ -33,4 +33,14 @@ public class TaskServiceImpl implements TaskService {
 
         taskRepository.save(task);
     }
+
+    @Override
+    public void deleteTask(Long taskId) {
+        Optional<Task> taskOptional = taskRepository.findById(taskId);
+        if (taskOptional.isEmpty()) {
+            throw new IllegalArgumentException("Task with id " + taskId + " does not exist.");
+        }
+
+        taskRepository.deleteById(taskId);
+    }
 }

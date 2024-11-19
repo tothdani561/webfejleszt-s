@@ -8,5 +8,7 @@ public interface TaskService {
 
     void createTaskForUser(Long userId, Task task);
 
+    void deleteTask(Long taskId);
+
 }
 
