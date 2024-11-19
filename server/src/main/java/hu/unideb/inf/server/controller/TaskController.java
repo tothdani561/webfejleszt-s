@@ -1,34 +1,27 @@
 package hu.unideb.inf.server.controller;
 
+import hu.unideb.inf.server.model.Task;
+import hu.unideb.inf.server.service.TaskService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/tasks")
 public class TaskController {
 
-    @PostMapping("/create")
-    void createOne() {
-        // TODO
-    };
+    @Autowired
+    private TaskService taskService;
 
-    @GetMapping("/{id}")
-    void findOne(@PathVariable Long id) {
-        // TODO
-    };
+    @PostMapping("/create/{userId}")
+    public ResponseEntity<String> createTaskForUser(@PathVariable Long userId, @RequestBody Task task) {
+        try {
+            taskService.createTaskForUser(userId, task);
+            return ResponseEntity.ok("Task created and assigned to user successfully.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
-    @PutMapping("/update/{id}")
-    void updateOne(@PathVariable Long id) {
-        // TODO
-    };
-
-    @GetMapping("?status={status}")
-    void findByStatus(@PathVariable String status) {
-        // TODO
-    };
-
-    @DeleteMapping("/{id}")
-    void deleteOne(@PathVariable Long id) {
-        // TODO
-    };
 
 }

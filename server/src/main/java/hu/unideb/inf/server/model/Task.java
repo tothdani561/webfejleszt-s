@@ -1,5 +1,6 @@
 package hu.unideb.inf.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,9 +29,6 @@ public class Task {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "status", nullable = false)
-    private String status;
-
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
@@ -39,6 +37,7 @@ public class Task {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User user;
 
 }
