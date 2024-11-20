@@ -5,8 +5,10 @@ import hu.unideb.inf.server.model.User;
 import hu.unideb.inf.server.repository.TaskRepository;
 import hu.unideb.inf.server.repository.UserRepository;
 import hu.unideb.inf.server.service.UserService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,8 +18,27 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    @Autowired
     private TaskRepository taskRepository;
+
+    @Autowired
     private final UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    public void register(User user) {
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new IllegalArgumentException("Username is already taken.");
+        }
+
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("Email is already registered.");
+        }
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+    }
 
     @Override
     public void createOne(User user) {
@@ -53,6 +74,17 @@ public class UserServiceImpl implements UserService {
 
         // Mentés
         userRepository.save(existingUser);
+    }
+
+    public boolean authenticate(String username, String password) {
+        User user = loadUserByUsername(username);
+        return passwordEncoder.matches(password, user.getPassword());
+    }
+
+    @Override
+    public User loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
 
     @Override
