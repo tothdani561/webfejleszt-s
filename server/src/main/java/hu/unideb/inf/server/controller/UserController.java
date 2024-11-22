@@ -19,15 +19,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @PostMapping("/create")
-    void createOne(@NonNull @RequestBody User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userService.createOne(user);
-    };
-
     @GetMapping("/{id}")
     public ResponseEntity<User> findOne(@PathVariable Long id) {
         return userService.findOne(id)

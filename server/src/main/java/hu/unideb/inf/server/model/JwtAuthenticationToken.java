@@ -9,13 +9,13 @@ import java.util.Collection;
 public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
     private final UserDetails principal;
-    private String credentials;
+    private final String credentials;
 
     public JwtAuthenticationToken(UserDetails principal, String credentials, Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
         this.principal = principal;
         this.credentials = credentials;
-        setAuthenticated(true); // Az autentikáció már megtörtént a filterben
+        setAuthenticated(true);
     }
 
     @Override

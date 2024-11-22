@@ -41,15 +41,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void createOne(User user) {
-        if (userRepository.existsByEmail(user.getEmail())) {
-            throw new IllegalArgumentException("User already exists with this email: " + user.getEmail());
-        }
-
-        userRepository.save(user);
-    }
-
-    @Override
     public Optional<User> findOne(Long id) {
         return userRepository.findById(id);
     }
@@ -59,22 +50,49 @@ public class UserServiceImpl implements UserService {
         User existingUser = userRepository.findById(updatedUser.getId())
                 .orElseThrow(() -> new IllegalArgumentException("User with id " + updatedUser.getId() + " does not exist."));
 
-        existingUser.setUsername(updatedUser.getUsername());
-        existingUser.setPassword(updatedUser.getPassword());
-        existingUser.setEmail(updatedUser.getEmail());
+        // Frissítjük az username, email mezőket
+        if (updatedUser.getUsername() != null) {
+            existingUser.setUsername(updatedUser.getUsername());
+        }
+        if (updatedUser.getEmail() != null) {
+            existingUser.setEmail(updatedUser.getEmail());
+        }
 
+        // A jelszó frissítése titkosítással
+        if (updatedUser.getPassword() != null) {
+            String encodedPassword = passwordEncoder.encode(updatedUser.getPassword());
+            existingUser.setPassword(encodedPassword);
+        }
+
+        // Tasks kezelése
         if (updatedUser.getTasks() != null) {
-            existingUser.getTasks().clear();
+            for (Task updatedTask : updatedUser.getTasks()) {
+                // Ellenőrizzük, hogy a Task már létezik-e
+                Optional<Task> existingTaskOpt = existingUser.getTasks().stream()
+                        .filter(task -> task.getId().equals(updatedTask.getId()))
+                        .findFirst();
 
-            for (Task task : updatedUser.getTasks()) {
-                task.setUser(existingUser);
-                existingUser.getTasks().add(task);
+                if (existingTaskOpt.isPresent()) {
+                    // Ha létezik, frissítjük az adatokat
+                    Task existingTask = existingTaskOpt.get();
+                    existingTask.setName(updatedTask.getName());
+                    existingTask.setDescription(updatedTask.getDescription());
+                    existingTask.setPriority(updatedTask.getPriority());
+                    existingTask.setUpdatedAt(updatedTask.getUpdatedAt());
+                } else {
+                    // Ha nem létezik, hozzáadjuk az új Task-ot
+                    updatedTask.setUser(existingUser); // Beállítjuk az új Task felhasználóját
+                    existingUser.getTasks().add(updatedTask);
+                }
             }
         }
 
-        // Mentés
+        // Mentés az adatbázisba
         userRepository.save(existingUser);
     }
+
+
+
 
     public boolean authenticate(String username, String password) {
         User user = loadUserByUsername(username);
@@ -86,6 +104,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
+
 
     @Override
     public void deleteOne(Long id) {

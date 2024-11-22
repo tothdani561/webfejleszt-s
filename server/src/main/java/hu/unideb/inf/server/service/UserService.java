@@ -10,8 +10,6 @@ import java.util.Optional;
 
 public interface UserService extends UserDetailsService {
 
-    void createOne(User user);
-
     Optional<User> findOne(Long id);
 
     void updateOne(User updated);

@@ -21,6 +21,7 @@ public class Task {
     private Long id;
 
     @Column(name = "priority", nullable = false)
+    @Enumerated(EnumType.STRING)
     Priority priority;
 
     @Column(name = "name", nullable = false)
