@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { TodoCardProps } from "../../interfaces";
 import ToDoModal from "./ToDoModal";
 
-const TodoCard: React.FC<TodoCardProps> = ({ title }) => {
+const TodoCard: React.FC<TodoCardProps> = ({ title, description }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleCardClick = () => {
@@ -23,7 +23,7 @@ const TodoCard: React.FC<TodoCardProps> = ({ title }) => {
             <h3 className="text-xl font-bold mb-2">{title}</h3>
         </div>
         <ToDoModal isOpen={isModalOpen} onClose={handleCloseModal} title={title}>
-            <p>This is the modal content for "{title}"</p>
+            <p>{description}</p>
         </ToDoModal>
     </>
     );
