@@ -19,10 +19,10 @@ public class TaskServiceImpl implements TaskService {
     private TaskRepository taskRepository;
 
     @Override
-    public void createTaskForUser(Long userId, Task task) {
-        Optional<User> userOptional = userRepository.findById(userId);
+    public void createTaskForUser(String username, Task task) {
+        Optional<User> userOptional = userRepository.findByUsername(username);
         if (userOptional.isEmpty()) {
-            throw new IllegalArgumentException("User with id " + userId + " does not exist.");
+            throw new IllegalArgumentException("User with id " + username + " does not exist.");
         }
 
         User user = userOptional.get();

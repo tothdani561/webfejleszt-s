@@ -14,7 +14,7 @@ public interface UserService extends UserDetailsService {
 
     void updateOne(User updated);
 
-    void deleteOne(Long id);
+    void deleteOne(String id);
 
     boolean authenticate(String username, String password) throws UsernameNotFoundException;
 

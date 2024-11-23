@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface TaskService {
 
-    void createTaskForUser(Long userId, Task task);
+    void createTaskForUser(String userId, Task task);
 
     void deleteTask(Long taskId);
 

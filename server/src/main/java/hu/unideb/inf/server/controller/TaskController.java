@@ -13,10 +13,10 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
-    @PostMapping("/create/{userId}")
-    public ResponseEntity<String> createTaskForUser(@PathVariable Long userId, @RequestBody Task task) {
+    @PostMapping("/create/{username}")
+    public ResponseEntity<String> createTaskForUser(@PathVariable String username, @RequestBody Task task) {
         try {
-            taskService.createTaskForUser(userId, task);
+            taskService.createTaskForUser(username, task);
             return ResponseEntity.ok("Task created and assigned to user successfully.");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

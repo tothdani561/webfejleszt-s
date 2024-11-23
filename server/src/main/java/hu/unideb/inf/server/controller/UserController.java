@@ -43,10 +43,10 @@ public class UserController {
         }
     };
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteOne(@PathVariable Long id) {
+    @DeleteMapping("/delete/{username}")
+    public ResponseEntity<String> deleteOne(@PathVariable String username) {
         try {
-            userService.deleteOne(id);
+            userService.deleteOne(username);
             return ResponseEntity.ok("User deleted successfully.");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

@@ -5,6 +5,7 @@ import hu.unideb.inf.server.model.User;
 import hu.unideb.inf.server.repository.TaskRepository;
 import hu.unideb.inf.server.repository.UserRepository;
 import hu.unideb.inf.server.service.UserService;
+import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,8 +93,6 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
-
     public boolean authenticate(String username, String password) {
         User user = loadUserByUsername(username);
         return passwordEncoder.matches(password, user.getPassword());
@@ -107,13 +106,15 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void deleteOne(Long id) {
-        Optional<User> user = userRepository.findById(id);
-        if (user.isEmpty()){
-            throw new IllegalArgumentException("User with id " + id + " does not exist.");
+    @Transactional
+    public void deleteOne(String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isEmpty()) {
+            throw new IllegalArgumentException("User with username " + username + " does not exist.");
         }
-        userRepository.deleteById(id);
+        userRepository.removeByUsername(username);
     }
+
 
 
     @Override
