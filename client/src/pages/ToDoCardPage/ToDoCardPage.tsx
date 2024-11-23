@@ -49,6 +49,7 @@ export default ToDoCardPage;*/
 
 import React from "react";
 import TodoCard from "../../component/ToDoCard/ToDoCard";
+import Navbar from "../../component/Navbar/Navbar";
 import { TodoCardProps } from "../../interfaces";
 
 const TodoListPage: React.FC = () => {
@@ -59,11 +60,14 @@ const TodoListPage: React.FC = () => {
         ];
 
     return (
-        <div className="p-8">
-        {todos.map((todo, index) => (
-            <TodoCard key={index} title={todo.title} description={todo.description} />
-        ))}
-        </div>
+        <>
+            <Navbar />
+            <div className="p-8">
+            {todos.map((todo, index) => (
+                <TodoCard key={index} title={todo.title} description={todo.description} />
+            ))}
+            </div>
+        </>
     );
 };
 

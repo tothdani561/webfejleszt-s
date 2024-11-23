@@ -15,7 +15,9 @@ const Navbar = () => {
                 </ul>
             </div>
             <div className="navbar-end gap-5">
-                <a className="btn">Bejelentkezés</a>
+                <Link to={"/login"}>
+                    <a className="btn">Bejelentkezés</a>
+                </Link>
                 <Link to={"/register"}>
                     <a className="btn">Regisztráció</a>
                 </Link>
