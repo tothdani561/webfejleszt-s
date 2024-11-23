@@ -1,4 +1,4 @@
-import axios from "axios";
+/*import axios from "axios";
 import { useEffect, useState } from "react";
 import TodoCard from "../../component/ToDoCard/ToDoCard";
 import { Todo } from "../../interfaces";
@@ -43,4 +43,28 @@ const ToDoCardPage: React.FC = () => {
     );
 };
 
-export default ToDoCardPage;
+export default ToDoCardPage;*/
+
+
+
+import React from "react";
+import TodoCard from "../../component/ToDoCard/ToDoCard";
+import { TodoCardProps } from "../../interfaces";
+
+const TodoListPage: React.FC = () => {
+    const todos: TodoCardProps[] = [
+        { title: "Learn React", description: "Learn the basics of React" },
+        { title: "Practice TypeScript", description: "Enhance TypeScript skills" },
+        { title: "Build a Modal", description: "Create a modal component" },
+        ];
+
+    return (
+        <div className="p-8">
+        {todos.map((todo, index) => (
+            <TodoCard key={index} title={todo.title} description={todo.description} />
+        ))}
+        </div>
+    );
+};
+
+export default TodoListPage;
