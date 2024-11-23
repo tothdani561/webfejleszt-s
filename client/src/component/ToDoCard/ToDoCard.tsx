@@ -1,7 +1,4 @@
-interface TodoCardProps {
-    title: string;
-    description: string;
-}
+import { TodoCardProps } from "../../interfaces";
 
 const TodoCard: React.FC<TodoCardProps> = ({ title, description }) => {
     return (

@@ -1,12 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import TodoCard from "../../component/ToDoCard/ToDoCard";
-
-interface Todo {
-    id: number;
-    title: string;
-    description: string;
-}
+import { Todo } from "../../interfaces";
 
 const ToDoCardPage: React.FC = () => {
     const [todos, setTodos] = useState<Todo[]>([]);

@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
-
-interface LoginData {
-    username: string;
-    password: string;
-}
+import { LoginData } from '../../interfaces';
 
 const Login: React.FC = () => {
     const [formData, setFormData] = useState<LoginData>({
