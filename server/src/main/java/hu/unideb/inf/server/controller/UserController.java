@@ -13,18 +13,19 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<User> findOne(@PathVariable Long id) {
-        return userService.findOne(id)
+    @GetMapping("/{username}")
+    public ResponseEntity<User> findOne(@PathVariable String username) {
+        return userService.findOne(username)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
-    };
+    }
+
 
     @GetMapping("/{userId}/tasks")
     public ResponseEntity<List<Task>> getUserTasks(@PathVariable Long userId) {
