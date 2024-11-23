@@ -4,8 +4,8 @@ const Navbar = () => {
     return (
         <div className="navbar bg-slate-200 shadow-lg">
             <div className="navbar-start">
-                <Link to={"/"}>
-                    <a className="btn btn-ghost text-xl">daisyUI</a>
+                <Link to={"/"} className="btn btn-ghost text-xl">
+                    daisyUI
                 </Link>
             </div>
             <div className="navbar-center hidden lg:flex">
@@ -15,11 +15,11 @@ const Navbar = () => {
                 </ul>
             </div>
             <div className="navbar-end gap-5">
-                <Link to={"/login"}>
-                    <a className="btn">Bejelentkezés</a>
+                <Link to={"/login"} className="btn">
+                    Bejelentkezés
                 </Link>
-                <Link to={"/register"}>
-                    <a className="btn">Regisztráció</a>
+                <Link to={"/register"} className="btn">
+                    Regisztráció
                 </Link>
             </div>
         </div>
