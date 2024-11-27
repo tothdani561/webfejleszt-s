@@ -7,6 +7,8 @@ export interface Todo {
 export interface TodoCardProps {
     title: string;
     description: string;
+    onEdit: () => void;
+    onDelete: () => void;
 }
 
 export interface RegistrationData {

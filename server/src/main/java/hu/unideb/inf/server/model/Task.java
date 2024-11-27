@@ -2,6 +2,7 @@ package hu.unideb.inf.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,6 +29,7 @@ public class Task {
     private String name;
 
     @Column(name = "description", nullable = false)
+    @Size(max = 255, message = "Description must be at most 255 characters long.")
     private String description;
 
     @Column(name = "created_at", nullable = false)

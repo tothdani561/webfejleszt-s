@@ -1,31 +1,35 @@
 // components/TodoCard.tsx
-import React, { useState } from "react";
+import React from "react";
 import { TodoCardProps } from "../../interfaces";
-import ToDoModal from "./ToDoModal";
 
-const TodoCard: React.FC<TodoCardProps> = ({ title, description }) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const handleCardClick = () => {
-        setIsModalOpen(true);
-    };
-
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
-    };
-
+const TodoCard: React.FC<TodoCardProps> = ({ title, description, onEdit, onDelete }) => {
     return (
-    <>
-        <div
-            className="bg-white shadow-md rounded-lg p-4 mb-4 border border-gray-200 cursor-pointer"
-            onClick={handleCardClick}
-        >
-            <h3 className="text-xl font-bold mb-2">{title}</h3>
+        <div className="bg-white shadow-md rounded-lg p-4 mb-4 border border-gray-200 flex flex-col justify-between h-full">
+            <div>
+                <h3 className="text-xl font-bold mb-2">{title}</h3>
+                <p className="text-gray-600">{description}</p>
+            </div>
+            <div className="flex justify-end mt-4 space-x-4">
+                <button
+                    className="bg-blue-500 text-white px-4 py-2 rounded"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        onEdit();
+                    }}
+                >
+                    Edit
+                </button>
+                <button
+                    className="bg-red-500 text-white px-4 py-2 rounded"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        onDelete();
+                    }}
+                >
+                    Delete
+                </button>
+            </div>
         </div>
-        <ToDoModal isOpen={isModalOpen} onClose={handleCloseModal} title={title}>
-            <p>{description}</p>
-        </ToDoModal>
-    </>
     );
 };
 
