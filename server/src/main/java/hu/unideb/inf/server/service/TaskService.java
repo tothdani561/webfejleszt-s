@@ -10,5 +10,7 @@ public interface TaskService {
 
     void deleteTask(Long taskId);
 
+    public void updateTask(Long taskId, Task updatedTask);
+
 }
 

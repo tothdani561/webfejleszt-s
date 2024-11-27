@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import TodoCard from "../../component/ToDoCard/ToDoCard";
 import Navbar from "../../component/Navbar/Navbar";
 
@@ -7,6 +8,7 @@ const TodoListPage: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
+    const navigate = useNavigate(); // Initialize useNavigate
     const accessToken = localStorage.getItem("accessToken");
 
     // Helper function to decode JWT and extract username
@@ -26,9 +28,15 @@ const TodoListPage: React.FC = () => {
 
     useEffect(() => {
         const fetchTodos = async () => {
+            if (!accessToken) {
+                navigate("/login"); // Redirect to login if token is missing
+                return;
+            }
+
             if (!username) {
                 setError("Failed to determine username from token. Please log in again.");
                 setLoading(false);
+                navigate("/login"); // Redirect to login if username can't be determined
                 return;
             }
 
@@ -40,6 +48,12 @@ const TodoListPage: React.FC = () => {
                         "Content-Type": "application/json",
                     },
                 });
+
+                if (response.status === 401 || response.status === 403) {
+                    // If unauthorized or forbidden, redirect to login
+                    navigate("/login");
+                    return;
+                }
 
                 if (!response.ok) {
                     throw new Error(`Failed to fetch tasks: ${response.statusText}`);
@@ -63,7 +77,7 @@ const TodoListPage: React.FC = () => {
         };
 
         fetchTodos();
-    }, [username, accessToken]);
+    }, [username, accessToken, navigate]);
 
     if (loading) {
         return (

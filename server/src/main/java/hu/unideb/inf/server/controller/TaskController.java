@@ -23,6 +23,19 @@ public class TaskController {
         }
     }
 
+    @PutMapping("/{taskId}")
+    public ResponseEntity<String> updateTask(
+            @PathVariable Long taskId,
+            @RequestBody Task updatedTask) {
+        try {
+            taskService.updateTask(taskId, updatedTask);
+            return ResponseEntity.ok("Task updated successfully.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+
     @DeleteMapping("/{taskId}")
     public ResponseEntity<String> deleteTask(@PathVariable Long taskId) {
         try {

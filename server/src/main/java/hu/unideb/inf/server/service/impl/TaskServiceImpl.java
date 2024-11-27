@@ -43,4 +43,18 @@ public class TaskServiceImpl implements TaskService {
 
         taskRepository.deleteById(taskId);
     }
+
+    @Override
+    public void updateTask(Long taskId, Task updatedTask) {
+        Task existingTask = taskRepository.findById(taskId)
+                .orElseThrow(() -> new IllegalArgumentException("Task not found with ID: " + taskId));
+
+        existingTask.setPriority(updatedTask.getPriority());
+        existingTask.setName(updatedTask.getName());
+        existingTask.setDescription(updatedTask.getDescription());
+        existingTask.setUpdatedAt(LocalDateTime.now());
+
+        taskRepository.save(existingTask);
+    }
+
 }
