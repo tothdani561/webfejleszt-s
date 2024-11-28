@@ -8,6 +8,7 @@ const TodoListPage: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [editModal, setEditModal] = useState<{ id: number; title: string; description: string; priority: string } | null>(null);
+    const [addModal, setAddModal] = useState<{ name: string; description: string; priority: string } | null>(null); // State for add modal
 
     const navigate = useNavigate();
     const accessToken = localStorage.getItem("accessToken");
@@ -104,6 +105,41 @@ const TodoListPage: React.FC = () => {
         }
     };
 
+    const handleAddTask = async () => {
+        if (!addModal || !username) return;
+    
+        const newTask = {
+            priority: addModal.priority,
+            name: addModal.name,
+            description: addModal.description,
+        };
+    
+        try {
+            const response = await fetch(`http://localhost:8080/tasks/create/${username}`, {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(newTask),
+            });
+    
+            // Ellenőrizzük, hogy a válasz sikeres-e
+            if (!response.ok) {
+                const errorText = await response.text(); // Olvassuk ki a hibaüzenetet, ha van
+                throw new Error(`Failed to add task: ${errorText}`);
+            }
+    
+            // Task sikeresen létrejött, frissítsük az oldalt
+            setAddModal(null); // Modal bezárása
+            window.location.reload(); // Oldal újratöltése
+        } catch (err: any) {
+            console.error("Add task error:", err.message);
+            alert(err.message || "An unknown error occurred.");
+        }
+    };
+    
+
     const handleDeleteTask = async (taskId: number) => {
         try {
             const response = await fetch(`http://localhost:8080/tasks/${taskId}`, {
@@ -123,7 +159,6 @@ const TodoListPage: React.FC = () => {
             alert(err.message || "An unknown error occurred.");
         }
     };
-    
 
     if (loading) {
         return (
@@ -169,7 +204,66 @@ const TodoListPage: React.FC = () => {
                 )}
             </div>
 
+            {/* Add Button */}
+            <button
+                className="fixed bottom-8 right-8 bg-blue-500 text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl"
+                onClick={() => setAddModal({ name: "", description: "", priority: "COMMON" })}
+            >
+                +
+            </button>
 
+            {/* Add Modal */}
+            {addModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                    <div className="bg-white p-8 rounded shadow-lg">
+                        <h2 className="text-lg font-bold mb-4">Add Task</h2>
+                        <label className="block mb-2">
+                            Name:
+                            <input
+                                className="border p-2 w-full"
+                                value={addModal.name}
+                                onChange={(e) => setAddModal({ ...addModal, name: e.target.value })}
+                            />
+                        </label>
+                        <label className="block mb-2">
+                            Description:
+                            <textarea
+                                className="border p-2 w-full"
+                                value={addModal.description}
+                                onChange={(e) => setAddModal({ ...addModal, description: e.target.value })}
+                            />
+                        </label>
+                        <label className="block mb-2">
+                            Priority:
+                            <select
+                                className="border p-2 w-full"
+                                value={addModal.priority}
+                                onChange={(e) => setAddModal({ ...addModal, priority: e.target.value })}
+                            >
+                                <option value="COMMON">COMMON</option>
+                                <option value="HIGH">HIGH</option>
+                                <option value="URGENT">URGENT</option>
+                            </select>
+                        </label>
+                        <div className="flex space-x-4 mt-4">
+                            <button
+                                className="bg-green-500 text-white px-4 py-2 rounded"
+                                onClick={handleAddTask}
+                            >
+                                Add
+                            </button>
+                            <button
+                                className="bg-red-500 text-white px-4 py-2 rounded"
+                                onClick={() => setAddModal(null)}
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Edit Modal */}
             {editModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
                     <div className="bg-white p-8 rounded shadow-lg">
